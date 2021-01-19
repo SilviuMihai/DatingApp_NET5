@@ -10,6 +10,7 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
+            //we don't need to map manually one object to the other
             CreateMap<AppUser,MemberDto>()
             .ForMember(dest => dest.PhotoUrl, 
             opt => opt.MapFrom(src =>src.Photos.FirstOrDefault(x=>x.IsMain).Url))
@@ -17,6 +18,7 @@ namespace API.Helpers
             opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge())); 
             CreateMap<Photo,PhotoDto>();
             CreateMap<MemberUpdateDto,AppUser>();
+            CreateMap<RegisterDto,AppUser>();
         }
     }
 }
