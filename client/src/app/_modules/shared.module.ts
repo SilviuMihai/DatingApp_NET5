@@ -6,9 +6,13 @@ import { TabsModule } from 'ngx-bootstrap/tabs'
 import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { FileUploadModule } from 'ng2-file-upload';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { TimeagoModule } from 'ngx-timeago';
 
 @NgModule({
   declarations: [],
+  //import for using external functionality
   imports: [
     CommonModule,
     BsDropdownModule.forRoot(),
@@ -18,15 +22,22 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     TabsModule.forRoot(),
     NgxGalleryModule,
     FileUploadModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    PaginationModule.forRoot(), // for any angular bootstrap will need forRoot()
+    ButtonsModule.forRoot(),
+    TimeagoModule.forRoot()
   ],
+  //export to use the functionality of different modules in our project
   exports:[
     BsDropdownModule,
     ToastrModule,
     TabsModule,
     NgxGalleryModule,
     FileUploadModule,
-    BsDatepickerModule
+    BsDatepickerModule,
+    PaginationModule,
+    ButtonsModule,
+    TimeagoModule
   ]
 })
 export class SharedModule { }

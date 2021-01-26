@@ -6,6 +6,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extentions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -31,9 +32,25 @@ namespace API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
-            var users = await _userRepository.GetMembersAsync();
+            //logged in user
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername()); 
+
+            //set the name of the current user logged
+            userParams.CurrentUsername = user.UserName;
+
+            //filtering the users in case of a female or male is logged in
+            //userParams.Gender will always be empty
+            if(string.IsNullOrEmpty(userParams.Gender))
+            {
+                //here will give it a value depending on who is logged in
+                userParams.Gender = user.Gender == "male" ? "female" : "male";
+            }
+
+            var users = await _userRepository.GetMembersAsync(userParams);
+            Response.AddPaginationHeader(users.CurrentPage,users.PageSize,
+            users.TotalCount,users.TotalPages);
             return Ok(users);
         }
         [HttpGet("{username}", Name = "GetUser")]
