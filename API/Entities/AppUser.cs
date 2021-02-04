@@ -34,5 +34,11 @@ namespace API.Entities
 
         public ICollection<Photo> Photos { get; set; }  
 
+        //currently the loggedIn User that is liked by other users
+        public ICollection<UserLike> LikedByUsers { get; set; } //liked by other users 
+
+        //currently the loggedIn User that is liking other users
+        public ICollection<UserLike> LikedUsers { get; set; } // users that I like
+
     }
 }

@@ -117,4 +117,18 @@ resetUserParams(){
 
       return params; 
   }
+
+  //to like a user
+  addLike(username:string)
+  {
+    return this.http.post(this.baseUrl + 'likes/' + username, {}); //this is a post we added an empty body -object
+  }
+
+  //predicate = liked or likedBy
+  getLikes(predicate:string, pageNumber, pageSize)
+  {
+    let params = this.getPaginationHeaders(pageNumber,pageSize);
+    params = params.append('predicate',predicate); 
+    return this.getPaginatedResult<Partial<Member[]>>(this.baseUrl + 'likes',params);
+  }
 }
