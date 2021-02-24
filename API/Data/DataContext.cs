@@ -11,6 +11,8 @@ namespace API.Data
 
        public DbSet<UserLike> Likes { get; set; }
 
+       public DbSet<Message> Messages { get; set; }
+
        
        protected override void OnModelCreating(ModelBuilder builder) //this will be override from base clas, which is a virtual function
         {
@@ -28,7 +30,14 @@ namespace API.Data
                                       .WithMany(l => l.LikedByUsers) // is liked by other users
                                       .HasForeignKey(s => s.LikedUserId)
                                       .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.Entity<Message>().HasOne(u => u.Recipient)
+                                     .WithMany(m => m.MessageReceived)
+                                     .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Message>().HasOne(s => s.Sender)
+                                     .WithMany(m => m.MessageSent)
+                                     .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
