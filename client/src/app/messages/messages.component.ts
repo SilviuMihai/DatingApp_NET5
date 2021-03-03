@@ -33,7 +33,6 @@ export class MessagesComponent implements OnInit {
         this.pagination = response.pagination;
         this.loading =false;
       })
-      console.log(this.messages);
   }
 
   pageChanged(event:any)

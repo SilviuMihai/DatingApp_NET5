@@ -37,6 +37,9 @@ export class AccountService {
 
   setCurrentUser(user:User)
   {
+    user.roles = [];
+    const roles = this.getDecodedToken(user.token).role; //gets the role from the token
+    Array.isArray(roles) ? user.roles=roles : user.roles.push(roles);
     localStorage.setItem('user',JSON.stringify(user));
     this.currentUserSource.next(user);
   }
@@ -52,5 +55,11 @@ export class AccountService {
         return user;
       })
     );
+  }
+
+  getDecodedToken(token){
+    //atob let's us see what it is in the token
+    //token has 3 sections and we want the payload section, that's why is passed [1] and using split
+    return JSON.parse(atob(token.split('.')[1]));
   }
 }
