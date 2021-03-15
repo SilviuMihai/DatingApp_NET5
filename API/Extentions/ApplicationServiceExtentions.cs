@@ -19,13 +19,14 @@ namespace API.Extentions
             services.AddDbContext<DataContext>(options => 
             { options.UseSqlite(config.GetConnectionString("DefaultConnection")); });
             services.AddScoped<ITokenService,TokenService>();
-            services.AddScoped<IUserRepository,UserRepository>();
+            //services.AddScoped<IUserRepository,UserRepository>(); using unit of work pattern
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<IPhotoService,PhotoService>();
             services.AddScoped<LogUserActivity>();
-            services.AddScoped<ILikesRepository,LikesRepository>();
-            services.AddScoped<IMessageRepository,MessageRepository>();
+            //services.AddScoped<ILikesRepository,LikesRepository>(); using unit of work pattern
+            //services.AddScoped<IMessageRepository,MessageRepository>(); using unit of work pattern
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.AddSingleton<PresenceTracker>();
             return services;
         }
