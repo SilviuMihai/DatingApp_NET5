@@ -32,7 +32,7 @@ namespace API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
+        public async Task<ActionResult<IEnumerable<MembersPhotosApprovedDto>>> GetUsers([FromQuery] UserParams userParams)
         {
             //logged in user
             var gender = await _unitOfWork.UserRepository.GetUserGender(User.GetUsername());
@@ -99,11 +99,11 @@ namespace API.Controllers
             };
 
             //check to see if the user has any photos in their collection
-            if (user.Photos.Count == 0)
-            {
-                //if they don't have, we will set to be the main photo
-                photo.IsMain = true;
-            }
+            // if (user.Photos.Count == 0)
+            // {
+            //     //if they don't have, we will set to be the main photo
+            //     photo.IsMain = true;
+            // }
 
             //add the photo
             user.Photos.Add(photo);
@@ -126,25 +126,27 @@ namespace API.Controllers
             var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
             //get the photo that we want to set it Main
-            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);  
 
             if (photo.IsMain)
             {
                 return BadRequest("This is already your main photo !");
             }
+            
+            //check if the Photo is approved           
+            var photoApproved = user.Photos.FirstOrDefault(x => x.Id == photoId && x.IsApproved == true);
 
             //currrent Main Photo
             var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
 
-            //Set Current Main Photo to false
-            if (currentMain != null)
+            //Set Current Main Photo to false and check if the photo was approved
+            if (currentMain != null && photoApproved != null)
             {
                 currentMain.IsMain = false;
+                //Set the chosen PHOTO to main
+                photo.IsMain = true;
             }
-
-            //Set the chosen PHOTO to main
-            photo.IsMain = true;
-
+            
             if (await _unitOfWork.Complete())
             {
                 return NoContent(); //returns 204 NoContent

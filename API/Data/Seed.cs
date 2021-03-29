@@ -11,7 +11,9 @@ namespace API.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers(UserManager<AppUser> userManager,RoleManager<AppRole> roleManager)
+        public static async Task SeedUsers(UserManager<AppUser> userManager,
+        RoleManager<AppRole> roleManager,
+        DataContext context)
         {
            if(await userManager.Users.AnyAsync()) return;
 
@@ -28,12 +30,14 @@ namespace API.Data
                new AppRole{ Name = "Admin"},
                new AppRole{ Name = "Moderator"}
            };
-
+          
+          //creates roles in the roleManager database
            foreach (var role in roles)
            {
                await roleManager.CreateAsync(role);
            }
 
+           //creates members
            foreach (var user in users)
            {
                user.UserName = user.UserName.ToLower();
@@ -41,6 +45,12 @@ namespace API.Data
                await userManager.CreateAsync(user,"Pa$$w0rd");
                await userManager.AddToRoleAsync(user,"Member");
            } 
+
+          //Set the photo to Approved for the seed Users
+          await context.PhotosManagement.ForEachAsync(x => x.IsApproved=true);
+          await context.SaveChangesAsync();
+
+
           //create a new user with the name admin
            var admin = new AppUser()
            {

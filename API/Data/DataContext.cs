@@ -24,7 +24,9 @@ namespace API.Data
 
        public DbSet<Connection> Connections { get; set; }
 
-       protected override void OnModelCreating(ModelBuilder builder) //this will be override from base clas, which is a virtual function
+       public DbSet<Photo> PhotosManagement { get; set; }
+
+       protected override void OnModelCreating(ModelBuilder builder) //this will be override from base class, which is a virtual function
         {
             base.OnModelCreating(builder);
 
@@ -61,6 +63,7 @@ namespace API.Data
                                      .WithMany(m => m.MessageSent)
                                      .OnDelete(DeleteBehavior.Restrict);
             builder.ApplyUtcDateTimeConverter();
+            //builder.Entity<Photo>().HasQueryFilter(p => p.IsApproved);
         }
     }
 public static class UtcDateAnnotation

@@ -26,8 +26,10 @@ namespace API.Extentions
             services.AddScoped<LogUserActivity>();
             //services.AddScoped<ILikesRepository,LikesRepository>(); using unit of work pattern
             //services.AddScoped<IMessageRepository,MessageRepository>(); using unit of work pattern
-            services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>(); // unit of work
             services.AddSingleton<PresenceTracker>();
+            //services.AddScoped<IPhotoManagement,PhotoRepository>(); //using unit of work pattern
+            services.AddHttpContextAccessor();
             return services;
         }
     }

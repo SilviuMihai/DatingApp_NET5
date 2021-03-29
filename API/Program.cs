@@ -32,7 +32,7 @@ namespace API
 
                 await context.Database.MigrateAsync();
 
-                await Seed.SeedUsers(userManager,roleManager);
+                await Seed.SeedUsers(userManager,roleManager,context);
             }
             catch (System.Exception ex)
             {
